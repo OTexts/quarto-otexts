@@ -1,6 +1,8 @@
 /_book/
 /.quarto/
 *_files/
+*_cache/
+/_freeze/
 
 **/*.quarto_ipynb
 

@@ -18,6 +18,18 @@ contributes:
       number-depth: 2
       code-link: false
       fig-responsive: true
+      # Figure defaults for R books (fig-dpi is doubled for retina screens)
+      fig-width: 7.5
+      fig-asp: 0.618
+      fig-dpi: 150
+      fig-align: center
+      knitr:
+        opts_chunk:
+          dev: ragg_png
+          fig.align: center # fig-align alone doesn't reach knitr chunks
+          out.width: "100%"
+          out.extra: 'loading="lazy"'
+          comment: ""
       published-title: "Last updated"
       date-format: "DD MMMM YYYY"
       csl: apa-single-spaced.csl

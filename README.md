@@ -29,6 +29,12 @@ Render with `quarto render` or `quarto render --to otexts-html` (not `--to html`
 
 Edit any book-specific rules in [`book.scss`](book.scss).
 
+### Figures
+
+The format sets the figure defaults for R books: 7.5in wide with a golden-ratio aspect (`fig-asp: 0.618`), 150 dpi (doubled for retina screens), centred, `ragg_png`, shown at 100% width with lazy loading, and no `##` before printed output.
+A book or chunk can override any of these (e.g. `fig-width: 7` in `_quarto.yml`), but don't also set them with `knitr::opts_chunk$set()`, which overrides the YAML.
+Python books ignore the knitr options.
+
 ### HTML post-processing
 
 `htmlreplace.pl` tidies the rendered HTML to OTexts house style.
@@ -44,7 +50,7 @@ An existing book can copy `post-render.R` from this repo.
 ## Not included
 
 - Plot styling (fonts and themes for figures) is R or Python code in each book.
-- Book-specific options: `execute`, `bibliography`, figure sizes, `code-fold`, `embed-resources`, extra header includes (e.g. fpp3's `youtube.html`), and the PDF format (fpppy).
+- Book-specific options: `bibliography`, `code-fold`, extra header includes (e.g. fpp3's `youtube.html`), and the PDF format (fpppy).
 
 ## Testing
 

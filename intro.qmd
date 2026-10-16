@@ -13,12 +13,12 @@ x <- c(1, 2, 3)
 mean(x)
 ```
 
-| Header | Value |
-|--------|------:|
-| a      |     1 |
-| b      |     2 |
+  | Header | Value |
+  | ------ | ----: |
+  | a      |     1 |
+  | b      |     2 |
 
-: An example table {#tbl-example}
+  : An example table {#tbl-example}
 
 ::: {.callout-tip}
 A tip callout.
@@ -27,3 +27,20 @@ A tip callout.
 ### A subsection
 
 #### Level four
+
+## A figure
+
+```{r}
+#| label: fig-example
+#| fig-cap: "A test figure, drawn with the format's figure defaults."
+
+library(ggplot2)
+mtcars |>
+  ggplot(aes(x = wt, y = mpg)) +
+  geom_point() +
+  labs(
+    title = "Scatter plot of MPG vs Weight",
+    x = "Weight (1000 lbs)",
+    y = "Miles per Gallon"
+  )
+```

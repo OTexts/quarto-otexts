@@ -138,6 +138,16 @@ pre code {
   border-radius: 5px;
 }
 
+// Quarto outdents code blocks and callouts on wide screens so their text
+// lines up with the body; keep the boxes flush with the text column instead
+@include media-breakpoint-up(lg) {
+  div.sourceCode,
+  .callout,
+  .callout:not(.no-icon) {
+    margin-left: 0;
+  }
+}
+
 // Printed chunk output: the code-block grey, without the left border, so it
 // is set apart from the text but still distinct from the code above it
 :is(.cell-output-stdout, .cell-output-stderr) pre {
