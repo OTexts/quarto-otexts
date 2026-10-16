@@ -1,0 +1,29 @@
+# Introduction {#sec-intro}
+
+Body text in Libron, with **bold**, *italic*, `inline code` and the package **`weird`**.
+Citations [@Hyndman2021; @Hawkins1980] and maths $\bar{y} = \frac{1}{n}\sum_{t=1}^n y_t$.
+
+## A section with `code()`
+
+> A blockquote on the theme tint.
+
+```r
+# A comment
+x <- c(1, 2, 3)
+mean(x)
+```
+
+| Header | Value |
+|--------|------:|
+| a      |     1 |
+| b      |     2 |
+
+: An example table {#tbl-example}
+
+::: {.callout-tip}
+A tip callout.
+:::
+
+### A subsection
+
+#### Level four

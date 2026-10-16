@@ -1,0 +1,25 @@
+# Test book for the otexts format
+project:
+  type: book
+
+book:
+  title: "OTexts format test"
+  author:
+    name: "<a href='https://robjhyndman.com'>Rob J Hyndman</a>"
+    affiliation: "Monash University, Australia"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - references.qmd
+  page-footer:
+    left: "Published by OTexts using [Quarto](https://quarto.org). &copy; []{#current-year}"
+    border: false
+    background: light
+  sidebar:
+    id: book
+    style: "docked"
+
+bibliography: references.bib
+
+format:
+  otexts-html: default

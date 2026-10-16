@@ -1,0 +1,298 @@
+/*-- scss:defaults --*/
+$theme-main: #65775c !default;
+$theme-gray: #ebebeb !default;
+$theme-yellow: #f4ba02 !default;
+$theme-orange: #f49b02 !default;
+
+$body-bg: white !default;
+$body-color: darken($theme-gray, 70%) !default;
+$link-color: $theme-main !default;
+$link-hover-color: saturate($theme-main, 40%) !default;
+$toc-color: $theme-main !default;
+$link-decoration: none !default;
+// Links take the weight of their context, so bold text stays bold
+$link-weight: inherit !default;
+$primary: $theme-main !default;
+$sidebar-bg: $theme-main !default;
+$sidebar-fg: white !default;
+$sidebar-hover-color: $theme-orange !default;
+$sidebar-active-color: $theme-yellow !default;
+
+$font-family-sans-serif: "Fira Sans", sans-serif !default;
+$font-family-monospace: "Hack", monospace !default;
+$headings-font-family: $font-family-sans-serif !default;
+$headings-font-weight: 600 !default;
+$headings-color: $theme-main !default;
+// Inline code takes the weight of its context, so **`pkg`** renders bold
+$font-weight-monospace-inline: inherit !default;
+
+$h2-font-size: 1.4rem !default;
+$h3-font-size: 1.2rem !default;
+$h4-font-size: 1rem !default;
+$h5-font-size: 0.9rem !default;
+
+$code-block-bg: #f2f2f2 !default;
+$code-block-border-left: #aaaaaa !default;
+$code-color: $body-color !default;
+$code-block-color: $body-color !default;
+// Pale theme tint shared by blockquotes and the current-section TOC pill
+$theme-tint: lighten($theme-main, 50%) !default;
+// Table header row and stub column
+$theme-header-bg: lighten($theme-main, 40%) !default;
+
+$callout-color-tip: $theme-orange !default;
+
+/*-- scss:rules --*/
+
+h1,
+h2 {
+  border-bottom: 1px solid rgba($headings-color, 0.6);
+  margin-top: 60px !important;
+  margin-bottom: 30px !important;
+}
+
+h4,
+h5 {
+  color: $body-color;
+}
+
+.header-section-number {
+  color: $headings-color;
+}
+
+dt {
+  color: $theme-main;
+}
+
+dd {
+  margin-bottom: 12px;
+  margin-left: 20px;
+  padding-left: 20px;
+}
+
+.quarto-title-meta,
+.quarto-title-meta-author {
+  font-family: $font-family-sans-serif;
+  color: $headings-color;
+}
+
+.table-caption,
+figcaption.quarto-float-caption,
+caption {
+  font-family: $font-family-sans-serif;
+  color: $body-color;
+  background-color: $theme-gray;
+  padding-left: 20px;
+  text-align: left;
+}
+
+.figure {
+  display: block;
+}
+
+table {
+  background: white;
+  margin: 2em 0;
+  border: 1px solid $theme-tint;
+}
+
+table td,
+table th {
+  border: 1px;
+  font-size: 0.9rem;
+  height: 12px;
+  text-shadow: none;
+  padding: 8px 12px !important;
+  line-height: 1.4 !important;
+}
+
+th {
+  color: $body-color;
+  background-color: $theme-header-bg !important;
+  font-weight: bold;
+}
+
+td {
+  background-color: white !important;
+}
+
+.stub-column td:first-child {
+  background-color: $theme-header-bg !important;
+  font-weight: bold;
+}
+
+blockquote {
+  quotes: none;
+  text-shadow: none;
+  color: darken($theme-gray, 80%) !important;
+  background: $theme-tint !important;
+  padding: 7px 20px;
+  margin: 1.5em 0;
+  border-radius: 5px;
+  border-left: 4px solid $theme-main !important;
+}
+
+pre code {
+  color: $body-color !important;
+  background-color: $code-block-bg;
+  border-radius: 5px;
+}
+
+// Printed chunk output: the code-block grey, without the left border, so it
+// is set apart from the text but still distinct from the code above it
+:is(.cell-output-stdout, .cell-output-stderr) pre {
+  background-color: $code-block-bg;
+  border-radius: 5px;
+  padding: 0.4em 0.6em;
+}
+
+// Code comments: the kate grey (#898887) is too faint on $code-block-bg.
+pre code span.co {
+  color: #6e6e6e; // lightest grey with 4.5:1 contrast (WCAG AA)
+}
+
+// Package names (**`pkg`**): bold monospace without the inline-code box.
+// Must outrank Quarto's `p code:not(.sourceCode)` (and li, td) rule.
+:is(p, li, td) strong > code:not(.sourceCode) {
+  background: none;
+  padding: 0;
+}
+
+.quarto-page-breadcrumbs .breadcrumb-item {
+  font-family: $font-family-sans-serif;
+}
+
+div.sidebar.sidebar-navigation.rollup.quarto-sidebar-toggle-contents,
+nav.sidebar.sidebar-navigation:not(.rollup) {
+  color: $sidebar-fg;
+  font-family: $font-family-sans-serif;
+  line-height: 1.2;
+}
+
+.sidebar-navigation .sidebar-item {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  margin-top: 0.3em;
+  margin-bottom: 0em;
+}
+
+.sidebar {
+  font-family: $font-family-sans-serif;
+  background-color: white;
+  color: $theme-main;
+}
+
+.sidebar-title {
+  padding-left: 0 !important;
+  text-indent: 0 !important;
+  font-weight: bold;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+}
+
+.sidebar-title > a:hover {
+  color: $sidebar-hover-color;
+}
+
+// Section TOC: rounded pills, lightly tinted on hover; the current section
+// uses $theme-tint with darker text (a solid pill looked too heavy).
+// No bold when active: the wider text would rewrap and shift the list on scroll
+nav[role="doc-toc"] .nav-link {
+  display: block;
+  border-radius: 15px;
+  padding: 2px 10px;
+  margin-bottom: 3px;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+nav[role="doc-toc"] .nav-link:hover {
+  background-color: rgba($theme-main, 0.06);
+}
+
+nav[role="doc-toc"] .nav-link.active,
+.sidebar nav[role="doc-toc"] ul > li > a.active,
+.sidebar nav[role="doc-toc"] ul > li > ul > li > a.active {
+  background-color: $theme-tint;
+  color: mix($theme-main, black, 75%) !important;
+  border-left: none !important;
+}
+
+// Code in headings (e.g. `quantile()`): monospace only, no box
+:is(h1, h2, h3, h4, h5, h6) code,
+:is(h1, h2, h3, h4, h5, h6) code span {
+  background: none;
+  padding: 0;
+}
+
+#quarto-sidebar .menu-text {
+  display: flex;
+}
+
+#quarto-sidebar .chapter-number {
+  color: inherit;
+  display: block;
+  width: 1.5em;
+  text-align: right;
+}
+
+#quarto-sidebar .chapter-title {
+  display: block;
+  padding-left: 8px;
+  text-indent: -2px;
+  width: 100%;
+}
+
+#toc-title {
+  font-weight: bold;
+}
+
+.page-navigation a:hover {
+  color: saturate($theme-main, 60%) !important;
+}
+
+.csl-entry {
+  padding-left: 22px;
+  text-indent: -22px;
+}
+
+.nav-footer,
+.nav-page-text {
+  font-family: $font-family-sans-serif;
+  min-height: 1em;
+}
+
+.nav-footer a:hover {
+  color: $link-hover-color;
+}
+
+button {
+  background-color: $theme-gray;
+  border-radius: 8px;
+  padding: 5px;
+  margin-top: 10px;
+  font-family: $font-family-sans-serif;
+}
+
+.katex {
+  font-size: 1.15em !important;
+}
+
+.callout.callout-style-default .callout-body {
+  font-size: 1rem;
+  font-weight: 400;
+  background-color: lighten($theme-gray, 5%);
+}
+
+.chapter-number::before {
+  content: "Chapter ";
+}
+
+.sidebar .chapter-number::before {
+  content: none !important;
+}
+
+div.csl-entry a:has(i.bi) {
+  text-indent: 0;
+}
