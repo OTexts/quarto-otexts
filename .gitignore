@@ -3,3 +3,6 @@
 *_files/
 
 **/*.quarto_ipynb
+
+/.luarc.json
+/tasks/

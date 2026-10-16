@@ -1,6 +1,7 @@
 # Test book for the otexts format
 project:
   type: book
+  post-render: post-render.R
 
 book:
   title: "OTexts format test"
@@ -22,4 +23,6 @@ book:
 bibliography: references.bib
 
 format:
-  otexts-html: default
+  otexts-html:
+    theme:
+      light: [book.scss]

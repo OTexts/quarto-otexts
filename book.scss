@@ -1,0 +1,22 @@
+// Sample book-specific styles, layered after the format's otexts.scss.
+// These values are fpp3's; a book only needs the lines it changes.
+
+/*-- scss:defaults --*/
+$theme-main: #6e3232;
+$theme-orange: #ff9100;
+
+// Derived from $theme-main by default; set them to change the amounts
+$link-color: saturate($theme-main, 25%);
+$link-hover-color: saturate($theme-main, 100%);
+$theme-tint: lighten($theme-main, 60%);
+$theme-header-bg: lighten($theme-main, 60%);
+
+/*-- scss:rules --*/
+
+// Rules used only by this book, e.g. a compact table for an algorithm
+.hk-algorithm {
+  td {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+}
