@@ -38,18 +38,21 @@ Python books ignore the knitr options.
 ### HTML post-processing
 
 `htmlreplace.pl` tidies the rendered HTML to OTexts house style.
-Format extensions can't add a post-render step, so the book runs it from [`post-render.R`](post-render.R), set in `_quarto.yml`:
+Format extensions can't add a post-render step, so the book runs one from [`post-render.R`](post-render.R), set in `_quarto.yml`:
 
 ```yaml
 project:
   post-render: post-render.R
 ```
 
+`post-render.R` calls `post_render()` from the [otexts R package](https://github.com/OTexts/otexts), which runs `htmlreplace.pl` on the rendered HTML and then compresses the figures with [pngquant](https://pngquant.org).
+It needs the otexts package (`pak::pak("OTexts/otexts")`), Perl and pngquant installed.
 An existing book can copy `post-render.R` from this repo.
+A Python book can run `perl -i _extensions/OTexts/otexts/htmlreplace.pl` on the HTML files from its own post-render script instead.
 
 ## Not included
 
-- Plot styling (fonts and themes for figures) is R or Python code in each book.
+- Plot styling (fonts and themes for figures): R books get it from the [otexts R package](https://github.com/OTexts/otexts) (`otexts::setup_book()`); Python books set their own.
 - Book-specific options: `bibliography`, `code-fold`, extra header includes (e.g. fpp3's `youtube.html`), and the PDF format (fpppy).
 
 ## Testing
