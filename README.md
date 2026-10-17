@@ -35,6 +35,18 @@ The format sets the figure defaults for R books: 7.5in wide with a golden-ratio 
 A book or chunk can override any of these (e.g. `fig-width: 7` in `_quarto.yml`), but don't also set them with `knitr::opts_chunk$set()`, which overrides the YAML.
 Python books ignore the knitr options.
 
+### Wide tables and equations
+
+On narrow screens, a table wider than the text column shrinks to fit (down to 9px text) and then scrolls, and a long display equation scrolls within its own box.
+Inline maths can't do that by default, since it has to wrap with the text.
+For a wide inline equation that should stay on the same line as a list item's letter, mark it with the `wide-math` class:
+
+```markdown
+a. [$\displaystyle \mathbf{X}'\mathbf{X} = \frac{1}{6}\begin{bmatrix} ... \end{bmatrix}$]{.wide-math}
+```
+
+It still breaks after `=`, and scrolls only if a piece is still too wide.
+
 ### HTML post-processing
 
 `htmlreplace.pl` tidies the rendered HTML to OTexts house style.

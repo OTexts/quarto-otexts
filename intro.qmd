@@ -24,6 +24,12 @@ mean(x)
 A tip callout.
 :::
 
+A lettered list with wide inline equations:
+
+a. [$\displaystyle\text{Var}(\hat{y}_{t}) = \hat{\sigma}^2\left[ 1 + \frac{2}{T(T - 1)}\left( 1 - 4T - 6h + 6\frac{(T + h)^2}{T + 1} \right) \right]$]{.wide-math}
+
+b. [$\displaystyle\mathbf{X}'\mathbf{X} = \frac{1}{6}\begin{bmatrix} 6T & 3T(T + 1) \\ 3T(T + 1) & T(T + 1)(2T + 1) \end{bmatrix}$]{.wide-math}
+
 ### A subsection
 
 #### Level four
