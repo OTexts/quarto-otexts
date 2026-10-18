@@ -47,6 +47,11 @@ a. [$\displaystyle \mathbf{X}'\mathbf{X} = \frac{1}{6}\begin{bmatrix} ... \end{b
 
 It still breaks after `=`, and scrolls only if a piece is still too wide.
 
+### Today's date
+
+Write `[]{#current-date}` where the page should show the reader's date, such as the access date in a "how to cite" note; a script fills it in as e.g. "18 October 2026".
+Likewise `[]{#current-year}` shows the current year.
+
 ### HTML post-processing
 
 `htmlreplace.pl` tidies the rendered HTML to OTexts house style.
