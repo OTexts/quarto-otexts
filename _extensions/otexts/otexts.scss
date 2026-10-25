@@ -76,6 +76,15 @@ dd {
   color: $headings-color;
 }
 
+// Subtitle on the title page: sans serif, smaller, in the title colour, and
+// close to the rule under the title
+#title-block-header .subtitle {
+  font-family: $font-family-sans-serif;
+  font-size: 1.1rem;
+  color: $headings-color;
+  margin-top: -0.75rem;
+}
+
 .table-caption,
 figcaption.quarto-float-caption,
 caption {
