@@ -52,6 +52,26 @@ It still breaks after `=`, and scrolls only if a piece is still too wide.
 Write `[]{#current-date}` where the page should show the reader's date, such as the access date in a "how to cite" note; a script fills it in as e.g. "18 October 2026".
 Likewise `[]{#current-year}` shows the current year.
 
+### Language editions
+
+A book with translations can show a language selector in the sidebar, between the title and the search box.
+List every edition, this one included, in `_quarto.yml`:
+
+```yaml
+languages:
+  - lang: en
+    name: English
+    url: https://OTexts.com/fpp2/
+  - lang: zh
+    name: 中文
+    url: https://OTexts.com/fppcn/
+```
+
+The edition whose `lang` matches the book's `lang` (default `en`) is shown as selected.
+Choosing another one opens the same page in that edition, at the section, figure or table the reader is at, so the editions need the same file names and ids.
+If that edition has no such page, it opens its home page.
+Each edition needs the same `languages:` list.
+
 ### HTML post-processing
 
 `htmlreplace.pl` tidies the rendered HTML to OTexts house style.

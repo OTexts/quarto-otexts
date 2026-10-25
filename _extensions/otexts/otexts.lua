@@ -17,6 +17,28 @@ for _, font in ipairs(fonts) do
     path = "fonts/" .. font .. ".woff2" })
 end
 
+-- Language selector: the `languages:` list (lang, name, url of each edition)
+-- goes into the page as JSON, read by languages.js
+local function add_languages(languages)
+  if not languages or #languages == 0 then return end
+  local editions = {}
+  for _, l in ipairs(languages) do
+    table.insert(editions, {
+      lang = pandoc.utils.stringify(l.lang),
+      name = pandoc.utils.stringify(l.name),
+      url = pandoc.utils.stringify(l.url),
+    })
+  end
+  quarto.doc.add_html_dependency({
+    name = "otexts-languages",
+    version = "0.1.0",
+    scripts = { "languages.js" },
+  })
+  local json = quarto.json.encode(editions):gsub("</", "<\\/")
+  quarto.doc.include_text("in-header",
+    '<script type="application/json" id="otexts-languages">' .. json .. "</script>")
+end
+
 function Meta(meta)
   if quarto.doc.is_format("html") then
     quarto.doc.add_html_dependency({
@@ -25,6 +47,7 @@ function Meta(meta)
       stylesheets = { "fonts.css" },
       resources = resources,
     })
+    add_languages(meta.languages)
   end
   return meta
 end

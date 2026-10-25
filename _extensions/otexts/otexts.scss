@@ -221,6 +221,37 @@ nav.sidebar.sidebar-navigation:not(.rollup) {
   color: $sidebar-hover-color;
 }
 
+// Language selector (languages.js), between the title and the search box
+.otexts-languages {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.otexts-languages select {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  border: 1px solid rgba($sidebar-fg, 0.5);
+  border-radius: 5px;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.otexts-languages select:hover,
+.otexts-languages select:focus {
+  border-color: $sidebar-hover-color;
+}
+
+.otexts-languages option {
+  color: $body-color;
+  background-color: $body-bg;
+}
+
 // Section TOC: rounded boxes, lightly tinted on hover; the current section
 // uses $theme-tint with darker text (a solid box looked too heavy).
 // No bold when active: the wider text would rewrap and shift the list on scroll
