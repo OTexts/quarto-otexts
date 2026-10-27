@@ -52,6 +52,14 @@ It still breaks after `=`, and scrolls only if a piece is still too wide.
 Write `[]{#current-date}` where the page should show the reader's date, such as the access date in a "how to cite" note; a script fills it in as e.g. "18 October 2026".
 Likewise `[]{#current-year}` shows the current year.
 
+### Title block
+
+The front page shows the book's title in a rounded box, as on the old bookdown sites: the title on a grey band, then a band in the theme colour with the authors on one line ("A, B and C", linked where an author has a `url`) and each affiliation once.
+A `subtitle` (e.g. `subtitle: "(3rd ed)"` under `book:`) appears in small type after the title.
+The word joining the last two authors follows the book's `lang` (English, Italian, Spanish, Portuguese, French, German, Greek, Persian, Chinese, Japanese and Korean); other languages get "and".
+Set `$title-block-bg` in `book.scss` to change the grey.
+Other pages keep Quarto's usual title block.
+
 ### Language editions
 
 A book with translations can show a language selector in the sidebar, between the title and the search box.

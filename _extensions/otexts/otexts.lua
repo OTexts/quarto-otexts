@@ -39,8 +39,55 @@ local function add_languages(languages)
     '<script type="application/json" id="otexts-languages">' .. json .. "</script>")
 end
 
+-- Title block byline (title-block.html): the authors on one line, as "A, B
+-- and C" in the book's language, linked where they have a url, and each
+-- affiliation once
+local and_words = {
+  en = "and", it = "e", es = "y", pt = "e", fr = "et", de = "und",
+  el = "και", fa = "و", zh = "和", ja = "と", ko = "와",
+}
+
+local function add_byline(meta)
+  local authors = meta["by-author"]
+  if not authors or #authors == 0 then return end
+  local lang = pandoc.utils.stringify(meta.lang or "en"):match("^%a+")
+  local and_word = and_words[lang] or "and"
+  local byline = pandoc.Inlines({})
+  for i, a in ipairs(authors) do
+    if i > 1 then
+      if i == #authors then
+        byline:extend({ pandoc.Space(), pandoc.Str(and_word), pandoc.Space() })
+      else
+        byline:extend({ pandoc.Str(","), pandoc.Space() })
+      end
+    end
+    local name = a.name and a.name.literal or a.name
+    name = pandoc.Inlines(name or {})
+    if a.url then
+      byline:insert(pandoc.Link(name, pandoc.utils.stringify(a.url)))
+    else
+      byline:extend(name)
+    end
+  end
+  meta["otexts-byline"] = byline
+
+  local affiliations = pandoc.List({})
+  for _, aff in ipairs(meta["by-affiliation"] or {}) do
+    if aff.name then affiliations:insert(pandoc.Inlines(aff.name)) end
+  end
+  if #affiliations > 0 then
+    local joined = pandoc.Inlines({})
+    for i, aff in ipairs(affiliations) do
+      if i > 1 then joined:extend({ pandoc.Str(";"), pandoc.Space() }) end
+      joined:extend(aff)
+    end
+    meta["otexts-affiliations"] = joined
+  end
+end
+
 function Meta(meta)
   if quarto.doc.is_format("html") then
+    add_byline(meta)
     quarto.doc.add_html_dependency({
       name = "otexts-fonts",
       version = "0.1.0",
