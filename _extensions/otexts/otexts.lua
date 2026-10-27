@@ -41,7 +41,7 @@ end
 
 -- Title block byline (title-block.html): the authors on one line, as "A, B
 -- and C" in the book's language, linked where they have a url, and each
--- affiliation once
+-- affiliation once (only for one or two authors; longer lists get too long)
 local and_words = {
   en = "and", it = "e", es = "y", pt = "e", fr = "et", de = "und",
   el = "και", fa = "و", zh = "和", ja = "と", ko = "와",
@@ -70,6 +70,7 @@ local function add_byline(meta)
     end
   end
   meta["otexts-byline"] = byline
+  if #authors > 2 then return end
 
   local affiliations = pandoc.List({})
   for _, aff in ipairs(meta["by-affiliation"] or {}) do
