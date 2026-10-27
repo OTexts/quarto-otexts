@@ -40,7 +40,8 @@ local function add_languages(languages)
 end
 
 -- Title block byline (title-block.html): the authors on one line, as "A, B
--- and C" in the book's language, linked where they have a url, and each
+-- and C" in the book's language, linked where they have a url, with
+-- non-breaking spaces within names so lines break only between them, and each
 -- affiliation once (only for one or two authors; longer lists get too long)
 local and_words = {
   en = "and", it = "e", es = "y", pt = "e", fr = "et", de = "und",
@@ -62,7 +63,9 @@ local function add_byline(meta)
       end
     end
     local name = a.name and a.name.literal or a.name
-    name = pandoc.Inlines(name or {})
+    name = pandoc.Inlines(name or {}):walk({
+      Space = function() return pandoc.Str("\u{a0}") end,
+    })
     if a.url then
       byline:insert(pandoc.Link(name, pandoc.utils.stringify(a.url)))
     else
