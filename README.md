@@ -104,6 +104,13 @@ If the two books name their pages differently, `pages` maps this book's page nam
 Without `pages`, the page name is kept.
 Each book needs its own `software:` list, with `current: true` on itself and its own `pages` on the other.
 
+### PDF
+
+`otexts-pdf` loads the OTexts LaTeX style (`fpp.sty`, which Quarto copies to the project root when rendering, so a book can ignore it in git), a preamble (`preamble.tex`) and the index, and sets the shared PDF options: `book` class, pdfLaTeX, biblatex citations, numbered sections to depth 2, 2cm margins, wide figures and `keep-tex`.
+Render with `quarto render --to otexts-pdf`.
+The preamble sets `\graphicspath{{../_book}}` so `pdflatex` also works when run by hand in the `LaTeX/` folder after a render.
+A book can append its own LaTeX, such as its maths macros in a `macros.tex`, with `include-in-header` and `include-after-body`, which are added to the format's.
+
 ### HTML post-processing
 
 `htmlreplace.pl` tidies the rendered HTML to OTexts house style.
@@ -122,7 +129,7 @@ A Python book can run `perl -i _extensions/OTexts/otexts/htmlreplace.pl` on the 
 ## Not included
 
 - Plot styling (fonts and themes for figures): R books get it from the [otexts R package](https://github.com/OTexts/otexts) (`otexts::setup_book()`); Python books set their own.
-- Book-specific options: `bibliography`, `code-fold`, extra header includes (e.g. fpp3's `youtube.html`), and the PDF format (fpppy).
+- Book-specific options: `bibliography`, `code-fold`, extra header includes (e.g. fpp3's `youtube.html`).
 
 ## Testing
 

@@ -1,0 +1,13 @@
+\usepackage{fpp}
+
+% Allow per-figure width control: e.g., \setlength{\pandocfigwidth}{0.7\linewidth}
+% before a code cell to display it at 70% text width.
+% Automatically resets at end of figure environment (LaTeX grouping).
+\newlength{\pandocfigwidth}
+\setlength{\pandocfigwidth}{\linewidth}
+\renewcommand*\pandocbounded[1]{\resizebox{\pandocfigwidth}{!}{#1}}
+
+\DeclareUnicodeCharacter{2B24}{\textbullet}
+
+% So pdflatex also works run by hand in the LaTeX/ folder after a render
+\graphicspath{{../_book}}
