@@ -17,10 +17,16 @@ for _, font in ipairs(fonts) do
     path = "fonts/" .. font .. ".woff2" })
 end
 
+-- Write a list of metadata items into the page as JSON, for languages.js
+local function add_json(id, items)
+  local json = quarto.json.encode(items):gsub("</", "<\\/")
+  quarto.doc.include_text("in-header",
+    '<script type="application/json" id="' .. id .. '">' .. json .. "</script>")
+end
+
 -- Language selector: the `languages:` list (lang, name, url of each edition)
--- goes into the page as JSON, read by languages.js
 local function add_languages(languages)
-  if not languages or #languages == 0 then return end
+  if not languages or #languages == 0 then return false end
   local editions = {}
   for _, l in ipairs(languages) do
     table.insert(editions, {
@@ -29,20 +35,38 @@ local function add_languages(languages)
       url = pandoc.utils.stringify(l.url),
     })
   end
-  quarto.doc.add_html_dependency({
-    name = "otexts-languages",
-    version = "0.1.0",
-    scripts = { "languages.js" },
-  })
-  local json = quarto.json.encode(editions):gsub("</", "<\\/")
-  quarto.doc.include_text("in-header",
-    '<script type="application/json" id="otexts-languages">' .. json .. "</script>")
+  add_json("otexts-languages", editions)
+  return true
+end
+
+-- R and Python icons: the `software:` list (lang, name, url, and for the
+-- current book `current: true`). `pages` maps this book's page names to the
+-- other book's, e.g. intro: 01-intro
+local function add_software(software)
+  if not software or #software == 0 then return false end
+  local books = {}
+  for _, s in ipairs(software) do
+    local book = {
+      lang = pandoc.utils.stringify(s.lang),
+      name = pandoc.utils.stringify(s.name),
+      url = pandoc.utils.stringify(s.url),
+      current = s.current == true,
+    }
+    if s.pages then
+      book.pages = {}
+      for key, value in pairs(s.pages) do
+        book.pages[key] = pandoc.utils.stringify(value)
+      end
+    end
+    table.insert(books, book)
+  end
+  add_json("otexts-software", books)
+  return true
 end
 
 -- Title block byline (title-block.html): the authors on one line, as "A, B
--- and C" in the book's language, linked where they have a url, with
--- non-breaking spaces within names so lines break only between them, and each
--- affiliation once (only for one or two authors; longer lists get too long)
+-- and C" in the book's language, linked where they have a url, and each
+-- affiliation once
 local and_words = {
   en = "and", it = "e", es = "y", pt = "e", fr = "et", de = "und",
   el = "και", fa = "و", zh = "和", ja = "と", ko = "와",
@@ -63,9 +87,7 @@ local function add_byline(meta)
       end
     end
     local name = a.name and a.name.literal or a.name
-    name = pandoc.Inlines(name or {}):walk({
-      Space = function() return pandoc.Str("\u{a0}") end,
-    })
+    name = pandoc.Inlines(name or {})
     if a.url then
       byline:insert(pandoc.Link(name, pandoc.utils.stringify(a.url)))
     else
@@ -73,7 +95,6 @@ local function add_byline(meta)
     end
   end
   meta["otexts-byline"] = byline
-  if #authors > 2 then return end
 
   local affiliations = pandoc.List({})
   for _, aff in ipairs(meta["by-affiliation"] or {}) do
@@ -98,7 +119,15 @@ function Meta(meta)
       stylesheets = { "fonts.css" },
       resources = resources,
     })
-    add_languages(meta.languages)
+    local has_languages = add_languages(meta.languages)
+    local has_software = add_software(meta.software)
+    if has_languages or has_software then
+      quarto.doc.add_html_dependency({
+        name = "otexts-languages",
+        version = "0.1.0",
+        scripts = { "languages.js" },
+      })
+    end
   end
   return meta
 end

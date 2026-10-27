@@ -80,6 +80,30 @@ Choosing another one opens the same page in that edition, at the section, figure
 If that edition has no such page, it opens its home page.
 Each edition needs the same `languages:` list.
 
+### R and Python versions
+
+A book with both an R and a Python version can show their icons above the language selector: the current book's in full colour, the other faint and linking to its counterpart.
+List both in `_quarto.yml`:
+
+```yaml
+software:
+  - lang: r
+    name: R
+    url: https://OTexts.com/fpp3/
+    current: true
+  - lang: python
+    name: Python
+    url: https://OTexts.com/fpppy/
+    pages:
+      intro: 01-intro
+      graphics: 02-graphics
+```
+
+Clicking the faint icon opens the same section of the other book.
+If the two books name their pages differently, `pages` maps this book's page names (without `.html`) to the other's; with `pages`, a page not listed opens the other book's home page.
+Without `pages`, the page name is kept.
+Each book needs its own `software:` list, with `current: true` on itself and its own `pages` on the other.
+
 ### HTML post-processing
 
 `htmlreplace.pl` tidies the rendered HTML to OTexts house style.

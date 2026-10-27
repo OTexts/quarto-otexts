@@ -254,6 +254,37 @@ nav.sidebar.sidebar-navigation:not(.rollup) {
   color: $sidebar-hover-color;
 }
 
+// R and Python icons (languages.js), above the language selector: the book
+// being read in full colour, the other faint
+.otexts-software {
+  display: flex;
+  align-items: center;
+  gap: 0.9em;
+  margin-top: 0.5rem;
+}
+
+.otexts-software > * {
+  display: inline-flex;
+  color: $sidebar-fg;
+  line-height: 1;
+}
+
+.otexts-software svg {
+  height: 1.3rem;
+  width: auto;
+  fill: currentColor;
+}
+
+.otexts-software a {
+  opacity: 0.35;
+  transition: opacity 0.15s ease;
+}
+
+.otexts-software a:hover,
+.otexts-software a:focus-visible {
+  opacity: 0.8;
+}
+
 // Language selector (languages.js), between the title and the search box
 .otexts-languages {
   display: flex;
