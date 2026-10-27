@@ -4,7 +4,7 @@ $theme-gray: #ebebeb !default;
 $theme-yellow: #f4ba02 !default;
 $theme-orange: #f49b02 !default;
 // Top band of the front-page title block, and the author text below it
-$title-block-bg: #cccccc !default;
+$title-block-bg: #dddddd !default;
 
 $body-bg: white !default;
 $body-color: darken($theme-gray, 70%) !default;
@@ -83,7 +83,7 @@ dd {
 // over a band of the theme colour holding the authors and affiliations
 #title-block-header.otexts-title-block {
   margin-bottom: 2rem;
-  border-radius: 25px;
+  border-radius: 10px;
   overflow: hidden;
   font-family: $font-family-sans-serif;
   .quarto-title {
