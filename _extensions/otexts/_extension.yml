@@ -44,6 +44,8 @@ contributes:
       filters:
         - otexts.lua
     pdf:
+      template-partials:
+        - before-title.tex
       documentclass: book
       pdf-engine: pdflatex
       block-headings: false

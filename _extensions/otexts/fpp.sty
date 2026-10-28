@@ -74,22 +74,18 @@
 \providecommand{\otextsraggedright}{\raggedright}
 % Logo on the title page, at the start of the line for the book's direction
 \providecommand{\otextslogo}{\includegraphics[width=5cm]{extrafiles/OTexts-graylogo}}
-\providecommand{\otextsbooktitle}{forecasting: principles and practice}
-\providecommand{\otextsbibliography}{Bibliography}
-\providecommand{\otextsauthors}{Rob J Hyndman,
-          George Athanasopoulos,\\
-          Azul Garza,
-          Cristian Challu,\\
-          Max Mergenthaler,
-          Kin G Olivares}
-\providecommand{\otextstitle}{Forecasting: Principles~and~Practice,\\
-      the Pythonic Way}
+% The title, subtitle, authors and ISBN (\otextsbooktitle, \otextsbooksubtitle,
+% \otextsbookauthors, \otextsisbn, \otextssiteurl, \otextsprintedition) and the running head (\otextsrunningtitle,
+% the title unless `runningtitle` is set) come from the book's YAML, through
+% before-title.tex
+\providecommand{\otextstitle}{\otextsbooktitle
+  \ifdefempty{\otextsbooksubtitle}{}{\par{\large\otextsbooksubtitle}}}
 \providecommand{\otextscopyrightpage}{%
-    \emph{Forecasting: Principles and Practice, the Pythonic Way}\par
-    ISBN 978-0-9875071-4-3\par
+    \emph{\otextsbooktitle}\par
+    \ifdefempty{\otextsisbn}{}{ISBN \otextsisbn\par}
     Copyright \textcopyright\ \the\year. OTexts
-    \par{Available online at \textit{http://OTexts.com/fpppy/}}
-    \par\textit{Python print edition, May 2026}
+    \par{Available online at \textit{\otextssiteurl}}
+    \ifdefempty{\otextsprintedition}{}{\par\textit{\otextsprintedition, \monthyear}}
     \par\textsc{Published by OTexts}
 }
 
@@ -317,7 +313,7 @@
 \renewcommand{\footrulewidth}{0pt}
 \fancyhf{}
 \renewcommand{\chaptermark}[1]{\markboth{\thechapter.~#1}{}}
-\fancyhead[LE]{\thepage\quad\textsc{\otextsbooktitle}}% book title
+\fancyhead[LE]{\thepage\quad\textsc{\otextsrunningtitle}}% book title
 \fancyhead[RO]{\textsc{\MakeLowercase{\leftmark}}\quad\thepage}% chapter title
 
 % Title page
@@ -327,7 +323,7 @@
     \sffamily%
     \otextsraggedright
       \fontsize{14}{18}\selectfont\par\noindent\textcolor{darkgray}{{%
-          \otextsauthors%
+          \otextsbookauthors%
       }}%
       \par\vspace{9.5pc}%
       \fontsize{36}{48}\selectfont\par\noindent\textcolor{darkgray}{{\otextstitle}}%
@@ -382,7 +378,7 @@ minimum height=1.8em, text centered]
 \defbibheading{bibliography}[\bibname]{%
   \chapter*{#1}%
   \markboth{#1}{#1}%
-\addcontentsline{toc}{chapter}{\otextsbibliography}}
+\addcontentsline{toc}{chapter}{\bibname}}
 
 % hyperref is loaded after this file under XeLaTeX/LuaLaTeX
 \AtBeginDocument{%
