@@ -112,7 +112,8 @@ end
 
 -- Front page cover: `::: {.otexts-cover image="..."}` puts the book cover
 -- beside the div's content, which ends with the page's date-modified. Without
--- an image, a stand-in cover is drawn in CSS from the title and authors
+-- an image, a stand-in cover is drawn in CSS from the title and authors,
+-- with the optional `logo="..."` image (e.g. a hex sticker) below the title
 local function cover_book(div, meta)
   local image = div.attributes.image
   if image then
@@ -127,11 +128,16 @@ local function cover_book(div, meta)
     local name = a.name and a.name.literal or a.name
     authors:extend(pandoc.Inlines(name or {}))
   end
-  return pandoc.Div({
+  local parts = {
     pandoc.Div(pandoc.Plain(authors), { class = "otexts-cover-authors" }),
     pandoc.Div(pandoc.Plain(meta.title or {}), { class = "otexts-cover-title" }),
-    pandoc.Div(pandoc.Plain("OTexts"), { class = "otexts-cover-publisher" }),
-  }, { class = "otexts-cover-book otexts-cover-standin", ["aria-hidden"] = "true" })
+  }
+  if div.attributes.logo then
+    parts[#parts + 1] = pandoc.Div(pandoc.Plain(pandoc.Image("", div.attributes.logo)),
+      { class = "otexts-cover-logo" })
+  end
+  parts[#parts + 1] = pandoc.Div(pandoc.Plain("OTexts"), { class = "otexts-cover-publisher" })
+  return pandoc.Div(parts, { class = "otexts-cover-book otexts-cover-standin", ["aria-hidden"] = "true" })
 end
 
 local function cover(div, meta)
@@ -147,8 +153,32 @@ local function cover(div, meta)
   }, { class = "otexts-cover" })
 end
 
+-- The cover is for the web book only: in other formats it is dropped, with
+-- the page's heading (Quarto lifts a chapter's first heading out of any div,
+-- so the heading can't be hidden with .content-visible). Other blocks, such as
+-- the Jupyter engine's front matter cell, can sit between the two
+local function drop_cover(blocks)
+  local kept = pandoc.Blocks({})
+  for _, block in ipairs(blocks) do
+    if block.t == "Div" and block.classes:includes("otexts-cover") then
+      for i = #kept, 1, -1 do
+        if kept[i].t == "Header" then
+          if kept[i].level == 1 then kept:remove(i) end
+          break
+        end
+      end
+    else
+      kept:insert(block)
+    end
+  end
+  return kept
+end
+
 function Pandoc(doc)
-  if not quarto.doc.is_format("html") then return nil end
+  if not quarto.doc.is_format("html") then
+    doc.blocks = drop_cover(doc.blocks)
+    return doc
+  end
   doc.blocks = doc.blocks:walk({
     Div = function(div)
       if div.classes:includes("otexts-cover") then return cover(div, doc.meta) end
@@ -183,6 +213,7 @@ end
 -- unnumbered pages (e.g. the preface) Quarto ignores the "-" and gives the
 -- full chapter title, which htmlreplace.pl would turn into "Chapter N"
 function Cite(cite)
+  if not quarto.doc.is_format("html") then return nil end
   local c = cite.citations[1]
   if #cite.citations == 1 and c.mode == "SuppressAuthor" and c.id:match("^sec%-") then
     return pandoc.Span(cite, { class = "xref-noprefix" })

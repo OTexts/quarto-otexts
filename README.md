@@ -85,6 +85,7 @@ The cover is shown as a book beside the text, and above it on phones.
 The text ends with the page's `date-modified`, labelled with `published-title` ("Last updated" unless the book sets another).
 Without `image`, a stand-in cover is drawn from the book's title and authors in the theme colour.
 Since the cover shows the title and authors, the title block and the page's own heading are hidden on that page (the title block stays in the page for screen readers).
+The cover is for the web book only: in other formats (e.g. `otexts-pdf`) the cover and the page's heading are dropped, so the PDF starts with the next chapter, such as the preface.
 
 ### Language editions
 

@@ -161,7 +161,7 @@ dd {
 .otexts-cover-standin {
   aspect-ratio: 400 / 583;
   display: grid;
-  grid-template-rows: auto auto 1fr;
+  grid-template-rows: auto auto 1fr auto;
   background: linear-gradient(165deg, lighten($theme-main, 6%), darken($theme-main, 8%));
   color: white;
   font-family: $font-family-sans-serif;
@@ -180,7 +180,18 @@ dd {
     font-size: 1.6rem;
     line-height: 1.1;
   }
+  .otexts-cover-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6% 0;
+    img {
+      width: 48%;
+      height: auto;
+    }
+  }
   .otexts-cover-publisher {
+    grid-row: 4;
     align-self: end;
     padding: 0 9% 9%;
     text-align: end;

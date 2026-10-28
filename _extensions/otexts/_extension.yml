@@ -70,3 +70,5 @@ contributes:
         - fpp.sty
       default-image-extension: pdf
       keep-tex: true
+      filters:
+        - otexts.lua
