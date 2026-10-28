@@ -1,3 +1,4 @@
+\RequirePackage{iftex}
 
 %\pdfminorversion=3
 
@@ -14,18 +15,24 @@
 }
 
 \PassOptionsToPackage{colorlinks=false}{hyperref}
-\usepackage[x-302]{pdfx}
+\ifPDFTeX\usepackage[x-302]{pdfx}\fi
 
 % FONTS
+\ifPDFTeX
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\fi
 \usepackage{alltt}
 \let\temptt\texttt
 \renewcommand\texttt[1]{\mbox{\temptt{#1}}}
+% Under XeLaTeX/LuaLaTeX (e.g. right-to-left books) the fonts are set with
+% mainfont, sansfont and monofont in the document YAML instead
+\ifPDFTeX
 \usepackage[notextcomp,nott]{kpfonts}
 %\usepackage[t1,scale=0.86]{sourcecodepro}
 \usepackage[scaled=0.86]{DejaVuSansMono}
 \usepackage[lf,t]{carlito}
+\fi
 
 % Spacing
 \usepackage{parskip}
@@ -34,8 +41,11 @@
 \usepackage{paralist,booktabs,xspace,tabularx,multicol,mathtools, ragged2e}
 \mathtoolsset{mathic=true}
 \usepackage{multicol}
+\usepackage{placeins}
 \usepackage{rotating}
-\usepackage{amsmath,bm}
+\usepackage{amsmath}
+% bm clashes with unicode-math (XeLaTeX/LuaLaTeX); use bold italic there
+\ifPDFTeX\usepackage{bm}\else\providecommand{\bm}[1]{\symbfit{#1}}\fi
 \usepackage[hyphens]{url}
 \urlstyle{tt}
 
@@ -53,10 +63,35 @@
 \fi
 
 % Chapter and section headings
+\RequirePackage{etoolbox}
 \usepackage{titlesec,titletoc}
 \titlespacing*{\section}{0pt}{3ex}{1ex}
 \titlespacing*{\subsection}{0ex}{1ex}{0ex}
 \titlespacing*{\paragraph}{0pt}{1ex}{1em}
+
+% Strings a book can redefine in header-includes
+\providecommand{\otextschapter}{Chapter}
+\providecommand{\otextsraggedright}{\raggedright}
+% Logo on the title page, at the start of the line for the book's direction
+\providecommand{\otextslogo}{\includegraphics[width=5cm]{extrafiles/OTexts-graylogo}}
+\providecommand{\otextsbooktitle}{forecasting: principles and practice}
+\providecommand{\otextsbibliography}{Bibliography}
+\providecommand{\otextsauthors}{Rob J Hyndman,
+          George Athanasopoulos,\\
+          Azul Garza,
+          Cristian Challu,\\
+          Max Mergenthaler,
+          Kin G Olivares}
+\providecommand{\otextstitle}{Forecasting: Principles~and~Practice,\\
+      the Pythonic Way}
+\providecommand{\otextscopyrightpage}{%
+    \emph{Forecasting: Principles and Practice, the Pythonic Way}\par
+    ISBN 978-0-9875071-4-3\par
+    Copyright \textcopyright\ \the\year. OTexts
+    \par{Available online at \textit{http://OTexts.com/fpppy/}}
+    \par\textit{Python print edition, May 2026}
+    \par\textsc{Published by OTexts}
+}
 
 \selectcolormodel{HTML}
 \definecolor{main}{HTML}{333333}
@@ -65,9 +100,9 @@
 \titleformat{\chapter}%
 [display]% shape
 {}% format applied to label+text
-  {\huge\sffamily\bfseries\color{main}Chapter \thechapter}% label
+  {\huge\sffamily\bfseries\color{main}\otextschapter\ \thechapter}% label
   {0pt}% horizontal separation between label and title body
-  {\fontsize{26}{32}\sffamily\bfseries\raggedright\color{main}}% before the title body
+  {\fontsize{26}{32}\sffamily\bfseries\otextsraggedright\color{main}}% before the title body
 \titleformat{\section}%
 [hang]% shape
 {\sffamily\large\bfseries\color{main}}% format applied to label+text
@@ -89,13 +124,16 @@
 
 %% BIBLIOGRAPHY
 \usepackage{hyphenat}
-\usepackage[style=authoryear-comp,]{biblatex}
+% Quarto loads biblatex (with biblatexoptions) before this file
+\makeatletter
+\@ifpackageloaded{biblatex}{}{\usepackage[style=authoryear-comp]{biblatex}}
+\makeatother
 \ExecuteBibliographyOptions{bibencoding=utf8,minnames=1,maxnames=3, maxbibnames=99,terseinits=true,giveninits=true,uniquename=false,uniquelist=true,labeldate=true,doi=false, isbn=false, dashed=false, backref=true}
 \DefineBibliographyStrings{english}{%
   backrefpage = {Cited on p.},% originally "cited on page"
   backrefpages = {Cited on pp.},% originally "cited on pages"
 }
-\hypersetup{colorlinks=false}
+\AtBeginDocument{\hypersetup{colorlinks=false}}
 \renewbibmacro*{pageref}{%
   \iflistundef{pageref}%
   {\renewcommand{\finentrypunct}{\addperiod}}%
@@ -235,6 +273,8 @@
 \newunit}
 
 \renewcommand{\bibfont}{\small}
+% The index in the same size as the bibliography
+\AtBeginEnvironment{theindex}{\small}
 \setlength\bibitemsep{0.2\baselineskip}
 
 \defbibnote{backrefs}{Numbers on right indicate pages where each reference is cited.}
@@ -257,7 +297,7 @@
 \widowpenalty = 10000
 \brokenpenalty = 10000
 \RequirePackage{microtype}
-\DisableLigatures{encoding = T1, family = tt*}
+\ifPDFTeX\DisableLigatures{encoding = T1, family = tt*}\fi
 \raggedbottom
 \usepackage[bottom]{footmisc}
 
@@ -277,7 +317,7 @@
 \renewcommand{\footrulewidth}{0pt}
 \fancyhf{}
 \renewcommand{\chaptermark}[1]{\markboth{\thechapter.~#1}{}}
-\fancyhead[LE]{\thepage\quad\textsc{forecasting: principles and practice}}% book title
+\fancyhead[LE]{\thepage\quad\textsc{\otextsbooktitle}}% book title
 \fancyhead[RO]{\textsc{\MakeLowercase{\leftmark}}\quad\thepage}% chapter title
 
 % Title page
@@ -285,21 +325,15 @@
   \cleardoublepage%
   {%
     \sffamily%
-    \raggedright
+    \otextsraggedright
       \fontsize{14}{18}\selectfont\par\noindent\textcolor{darkgray}{{%
-          Rob J Hyndman,
-          George Athanasopoulos,\\
-          Azul Garza,
-          Cristian Challu,\\
-          Max Mergenthaler,
-          Kin G Olivares%
+          \otextsauthors%
       }}%
       \par\vspace{9.5pc}%
-      \fontsize{36}{48}\selectfont\par\noindent\textcolor{darkgray}{{Forecasting: Principles~and~Practice,\\
-      the Pythonic Way}}%
+      \fontsize{36}{48}\selectfont\par\noindent\textcolor{darkgray}{{\otextstitle}}%
       \vfill%
       %\fontsize{14}{16}\selectfont\par\noindent{\thanklesspublisher}%
-      \par\noindent\includegraphics[width=5cm]{extrafiles/OTexts-graylogo}
+      \par\noindent\otextslogo\par
   }
   \thispagestyle{empty}%
   \clearpage%
@@ -309,13 +343,7 @@
     \thispagestyle{empty}
     \setlength{\parindent}{0pt}
     \setlength{\parskip}{\baselineskip}
-    \emph{Forecasting: Principles and Practice, the Pythonic Way}\par
-    ISBN 978-0-9875071-4-3\par
-    Copyright \textcopyright\ \the\year. OTexts
-    \par{Available online at \textit{http://OTexts.com/fpppy/}}
-    \par\textit{Python print edition, May 2026}
-    \par\textsc{Published by OTexts}
-}
+    \otextscopyrightpage}
 \def\frontmatter{}
 \def\maketitle{\titlepage\doublehyphendemerits=\maxdimen\setlength{\parskip}{0.5\baselineskip}}
 
@@ -354,10 +382,12 @@ minimum height=1.8em, text centered]
 \defbibheading{bibliography}[\bibname]{%
   \chapter*{#1}%
   \markboth{#1}{#1}%
-\addcontentsline{toc}{chapter}{Bibliography}}
+\addcontentsline{toc}{chapter}{\otextsbibliography}}
 
+% hyperref is loaded after this file under XeLaTeX/LuaLaTeX
+\AtBeginDocument{%
 \let\oldhref\href
-\renewcommand{\href}[2]{#2\footnote{\fontsize{8}{9}\tt\url{#1}}}
+\renewcommand{\href}[2]{#2\footnote{\fontsize{8}{9}\tt\url{#1}}}}
 
 
 % Index

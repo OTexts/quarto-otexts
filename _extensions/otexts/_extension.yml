@@ -48,6 +48,8 @@ contributes:
       pdf-engine: pdflatex
       block-headings: false
       cite-method: biblatex
+      biblatexoptions:
+        - style=authoryear-comp
       number-sections: true
       number-depth: 2
       toc-depth: 2
