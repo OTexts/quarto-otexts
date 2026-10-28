@@ -60,6 +60,32 @@ The word joining the last two authors follows the book's `lang` (English, Italia
 Set `$title-block-bg` in `book.scss` to change the grey.
 Other pages keep Quarto's usual title block.
 
+### Front page cover
+
+To open the front page with the book cover, wrap a short introduction in an `otexts-cover` div:
+
+```markdown
+---
+date-modified: today
+---
+
+# Home {.unnumbered .unlisted}
+
+:::: {.otexts-cover image="figs/cover.jpg" alt="Front cover of ..."}
+[Third edition · Free to read online]{.eyebrow}
+
+One or two short paragraphs about the book.
+
+[Start reading](preface.qmd){.btn .btn-primary}
+[Buy a print version](print.qmd){.btn .btn-outline-primary}
+::::
+```
+
+The cover is shown as a book beside the text, and above it on phones.
+The text ends with the page's `date-modified`, labelled with `published-title` ("Last updated" unless the book sets another).
+Without `image`, a stand-in cover is drawn from the book's title and authors in the theme colour.
+Since the cover shows the title and authors, the title block and the page's own heading are hidden on that page (the title block stays in the page for screen readers).
+
 ### Language editions
 
 A book with translations can show a language selector in the sidebar, between the title and the search box.

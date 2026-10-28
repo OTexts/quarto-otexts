@@ -110,6 +110,53 @@ local function add_byline(meta)
   end
 end
 
+-- Front page cover: `::: {.otexts-cover image="..."}` puts the book cover
+-- beside the div's content, which ends with the page's date-modified. Without
+-- an image, a stand-in cover is drawn in CSS from the title and authors
+local function cover_book(div, meta)
+  local image = div.attributes.image
+  if image then
+    local alt = div.attributes.alt
+      or ("Front cover of " .. pandoc.utils.stringify(meta.title or ""))
+    return pandoc.Div(pandoc.Plain(pandoc.Image(alt, image)),
+      { class = "otexts-cover-book" })
+  end
+  local authors = pandoc.Inlines({})
+  for i, a in ipairs(meta["by-author"] or {}) do
+    if i > 1 then authors:insert(pandoc.LineBreak()) end
+    local name = a.name and a.name.literal or a.name
+    authors:extend(pandoc.Inlines(name or {}))
+  end
+  return pandoc.Div({
+    pandoc.Div(pandoc.Plain(authors), { class = "otexts-cover-authors" }),
+    pandoc.Div(pandoc.Plain(meta.title or {}), { class = "otexts-cover-title" }),
+    pandoc.Div(pandoc.Plain("OTexts"), { class = "otexts-cover-publisher" }),
+  }, { class = "otexts-cover-book otexts-cover-standin", ["aria-hidden"] = "true" })
+end
+
+local function cover(div, meta)
+  local text = pandoc.Blocks(div.content)
+  if meta["date-modified"] then
+    local label = pandoc.utils.stringify(meta["published-title"] or "Last updated")
+    text:insert(pandoc.Div(pandoc.Plain(label .. " " ..
+      pandoc.utils.stringify(meta["date-modified"])), { class = "otexts-cover-updated" }))
+  end
+  return pandoc.Div({
+    cover_book(div, meta),
+    pandoc.Div(text, { class = "otexts-cover-text" }),
+  }, { class = "otexts-cover" })
+end
+
+function Pandoc(doc)
+  if not quarto.doc.is_format("html") then return nil end
+  doc.blocks = doc.blocks:walk({
+    Div = function(div)
+      if div.classes:includes("otexts-cover") then return cover(div, doc.meta) end
+    end,
+  })
+  return doc
+end
+
 function Meta(meta)
   if quarto.doc.is_format("html") then
     add_byline(meta)
