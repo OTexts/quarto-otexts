@@ -2,14 +2,19 @@
 project:
   type: book
   post-render: post-render.R
+  resources:
+    - figs/*.jpg
 
 book:
   title: "OTexts format test"
+  cover-image: figs/cover.jpg
   author:
-    name: "<a href='https://robjhyndman.com'>Rob J Hyndman</a>"
+    name: "Rob J Hyndman"
+    url: "https://robjhyndman.com"
     affiliation: "Monash University, Australia"
   chapters:
     - index.qmd
+    - preface.qmd
     - intro.qmd
     - references.qmd
   page-footer:

@@ -1,3 +1,13 @@
-# Preface {.unnumbered}
+---
+date-modified: today
+---
 
-A test book for the OTexts format. See @sec-intro and @tbl-example; Chapter [-@sec-intro] is the only chapter.
+# Home {.unnumbered .unlisted}
+
+:::: {.otexts-cover}
+[First edition · Free to read online]{.eyebrow}
+
+A test book for the OTexts format. Replace this with one or two short paragraphs about your book.
+
+[Start reading](preface.qmd){.btn .btn-primary}
+::::

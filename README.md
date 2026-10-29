@@ -1,6 +1,6 @@
 # quarto-otexts
 
-A Quarto format extension with the shared HTML styling for OTexts books: theme, fonts, citation style, analytics and HTML post-processing.
+A Quarto format extension with the shared styling for OTexts books, in HTML (`otexts-html`) and PDF (`otexts-pdf`): theme, fonts, citation style, front page cover, language and software selectors, analytics, and post-processing.
 
 ## Installing
 
@@ -10,7 +10,7 @@ For a new book, start from the template in an empty directory:
 quarto use template OTexts/quarto-otexts
 ```
 
-This installs the extension in `_extensions/` and copies a small starter book: `_quarto.yml`, `book.scss`, `post-render.R` and a few chapters.
+This installs the extension in `_extensions/` and copies a small starter book: `_quarto.yml`, `book.scss`, `post-render.R` and a front page with a cover, a preface and a few chapters.
 
 For an existing book, add just the extension in the book's project directory:
 
@@ -52,17 +52,10 @@ It still breaks after `=`, and scrolls only if a piece is still too wide.
 Write `[]{#current-date}` where the page should show the reader's date, such as the access date in a "how to cite" note; a script fills it in as e.g. "18 October 2026".
 Likewise `[]{#current-year}` shows the current year.
 
-### Title block
+### Front page (HTML)
 
-The front page shows the book's title in a rounded box, as on the old bookdown sites: the title on a grey band, then a band in the theme colour with the authors on one line ("A, B and C", linked where an author has a `url`) and each affiliation once.
-A `subtitle` (e.g. `subtitle: "(3rd ed)"` under `book:`) appears in small type after the title.
-The word joining the last two authors follows the book's `lang` (English, Italian, Spanish, Portuguese, French, German, Greek, Persian, Chinese, Japanese and Korean); other languages get "and".
-Set `$title-block-bg` in `book.scss` to change the grey.
-Other pages keep Quarto's usual title block.
-
-### Front page cover
-
-To open the front page with the book cover, wrap a short introduction in an `otexts-cover` div:
+`index.qmd` is the front page.
+It shows the book cover beside a short introduction, set up like this (the template has one):
 
 ```markdown
 ---
@@ -71,7 +64,7 @@ date-modified: today
 
 # Home {.unnumbered .unlisted}
 
-:::: {.otexts-cover image="figs/cover.jpg" alt="Front cover of ..."}
+:::: {.otexts-cover}
 [Third edition · Free to read online]{.eyebrow}
 
 One or two short paragraphs about the book.
@@ -81,11 +74,38 @@ One or two short paragraphs about the book.
 ::::
 ```
 
-The cover is shown as a book beside the text, and above it on phones.
-The text ends with the page's `date-modified`, labelled with `published-title` ("Last updated" unless the book sets another).
-Without `image`, a stand-in cover is drawn from the book's title and authors in the theme colour.
+- `[...]{.eyebrow}` is the small line above the text, such as the edition.
+- The buttons are ordinary links with `.btn .btn-primary` (solid) or `.btn .btn-outline-primary` (outline).
+  Use as many as you like.
+- The text ends with the page's `date-modified`, labelled with `published-title` ("Last updated" unless the book sets another).
+  Drop the YAML header to leave it out.
+- The preface is a separate file, `preface.qmd`, which the "Start reading" button links to.
+
+Set the cover image in `_quarto.yml`, and list it under `resources` so it is copied into the book:
+
+```yaml
+project:
+  resources:
+    - figs/*.jpg
+book:
+  cover-image: figs/cover.jpg
+```
+
+It is used if the file exists, with alt text made from the title and authors ("Front cover of *title*, by *A and B*").
+Without an image, a stand-in cover is drawn from the book's title and authors in the theme colour; `$title-block-bg` in `book.scss` sets the grey band behind its title.
+
+Attributes on the `.otexts-cover` div override the book's settings:
+
+- `image="figs/other.jpg"`: use this image instead of `cover-image`.
+- `alt="..."`: use this alt text instead of the generated one.
+- `logo="figs/hex.png"`: for the stand-in cover only, show this image (e.g. a hex sticker) below the title.
+
 Since the cover shows the title and authors, the title block and the page's own heading are hidden on that page (the title block stays in the page for screen readers).
-The cover is for the web book only: in other formats (e.g. `otexts-pdf`) the cover and the page's heading are dropped, so the PDF starts with the next chapter, such as the preface.
+
+### Front matter (PDF)
+
+The PDF has no cover: the cover and the page's heading are dropped from `index.qmd`, so the book starts with the next chapter, such as the preface.
+The title page, running head and copyright page are built from the metadata: `title`, `subtitle`, `authors` (names only), `runningtitle` (default: the title), `isbn`, `print-edition` and `book: site-url`.
 
 ### Language editions
 
@@ -135,9 +155,17 @@ Each book needs its own `software:` list, with `current: true` on itself and its
 
 `otexts-pdf` loads the OTexts LaTeX style (`fpp.sty`, which Quarto copies to the project root when rendering, so a book can ignore it in git), a preamble (`preamble.tex`) and the index, and sets the shared PDF options: `book` class, pdfLaTeX, biblatex citations, numbered sections to depth 2, 2cm margins, wide figures and `keep-tex`.
 Render with `quarto render --to otexts-pdf`.
-Page breaks in code and output blocks are controlled by `code-blocks.lua`: a code block of up to 4 lines, or an output block of up to 16 lines, is kept in one piece, and a longer code block may break across pages only between R commands (a comment stays with the command after it), using `\otextscodebreaks` in `fpp.sty`. Output may start on the page after its code; there is a small space between code and output.
-The preamble sets `\graphicspath{{../_book}}` so `pdflatex` also works when run by hand in the `LaTeX/` folder after a render.
-A book can append its own LaTeX, such as its maths macros in a `macros.tex`, with `include-in-header` and `include-after-body`, which are added to the format's.
+
+- **Other engines:** set `pdf-engine: lualatex` (or `xelatex`) for right-to-left or non-Latin books.
+  The pdfTeX-only packages are then skipped, and book strings (chapter label, title page, copyright page, bibliography) are macros a book can redefine.
+- **Figures:** R plots use `cairo_pdf`, so they pick up the same fonts as the HTML figures (set up by `otexts::setup_book()`).
+- **Code and output:** code and R output are in shaded blocks.
+  A code block of up to 4 lines, or an output block of up to 16 lines, is kept in one piece.
+  A longer code block may break across pages only between R commands (a comment stays with the command after it).
+  This is done by `code-blocks.lua` and `\otextscodebreaks` in `fpp.sty`.
+- **Cover:** the front-page cover is dropped, so the PDF starts at the next chapter.
+- **Customising:** a book can append its own LaTeX, such as maths macros in a `macros.tex`, with `include-in-header` and `include-after-body`, which are added to the format's.
+  The preamble sets `\graphicspath{{../_book}}` so `pdflatex` also works when run by hand in the `LaTeX/` folder.
 
 ### HTML post-processing
 
