@@ -20,7 +20,7 @@ book:
   sidebar:
     id: book
     style: "docked"
-    footer: "Published by OTexts using [Quarto](https://quarto.org). &copy; []{#current-year}"
+    footer: "Published by [OTexts](https://otexts.org) using [Quarto](https://quarto.org). &copy; []{#current-year}"
 
 bibliography: references.bib
 
