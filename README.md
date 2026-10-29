@@ -135,7 +135,7 @@ Each book needs its own `software:` list, with `current: true` on itself and its
 
 `otexts-pdf` loads the OTexts LaTeX style (`fpp.sty`, which Quarto copies to the project root when rendering, so a book can ignore it in git), a preamble (`preamble.tex`) and the index, and sets the shared PDF options: `book` class, pdfLaTeX, biblatex citations, numbered sections to depth 2, 2cm margins, wide figures and `keep-tex`.
 Render with `quarto render --to otexts-pdf`.
-Code and output blocks are kept in one piece on a page (`code-blocks.lua`): a block of up to 16 lines goes in a minipage, and a longer code block may break across pages only between R commands (a comment stays with the command after it), using `\otextscodebreaks` in `fpp.sty`. A chunk of up to 24 lines is kept together with its output, and there is a small space between code and output.
+Page breaks in code and output blocks are controlled by `code-blocks.lua`: a code block of up to 4 lines, or an output block of up to 16 lines, is kept in one piece, and a longer code block may break across pages only between R commands (a comment stays with the command after it), using `\otextscodebreaks` in `fpp.sty`. Output may start on the page after its code; there is a small space between code and output.
 The preamble sets `\graphicspath{{../_book}}` so `pdflatex` also works when run by hand in the `LaTeX/` folder after a render.
 A book can append its own LaTeX, such as its maths macros in a `macros.tex`, with `include-in-header` and `include-after-body`, which are added to the format's.
 

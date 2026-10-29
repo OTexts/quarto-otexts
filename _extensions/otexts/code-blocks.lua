@@ -1,9 +1,11 @@
--- Keep code and output blocks in one piece on a PDF page. A block of at most
--- MAX_LINES lines goes in a minipage, which TeX can't split. A longer block of
--- code stays one block, but a page may break in it only between commands
--- (\otextscodebreaks in fpp.sty), or inside a command too long to fit on a
--- page. Longer output is left to break wherever it falls.
-local MAX_LINES = 16
+-- Page breaks in code and output blocks in the PDF. A code block of at most
+-- MAX_CODE_LINES lines, or an output block of at most MAX_OUTPUT_LINES lines,
+-- goes in a minipage, which TeX can't split. A longer code block may break
+-- across pages only between commands (\otextscodebreaks in fpp.sty), or
+-- inside a command too long to fit on a page. Longer output is left to break
+-- wherever it falls.
+local MAX_CODE_LINES = 4
+local MAX_OUTPUT_LINES = 16
 local PAGE_LINES = 40
 
 local function wrap(text, el)
@@ -53,8 +55,10 @@ end
 function CodeBlock(el)
   local lines = {}
   for line in (el.text .. "\n"):gmatch("(.-)\n") do lines[#lines + 1] = line end
-  if #lines <= MAX_LINES then return wrap(el.text, el) end
   local is_code = el.classes:includes("r") or el.classes:includes("sourceCode")
+  if #lines <= (is_code and MAX_CODE_LINES or MAX_OUTPUT_LINES) then
+    return wrap(el.text, el)
+  end
   if not is_code then return nil end
   local breaks, n = {}, 0
   for _, cmd in ipairs(commands(lines)) do
@@ -73,28 +77,10 @@ function CodeBlock(el)
   }
 end
 
--- Keep a short chunk's code and its output together
-local MAX_CELL_LINES = 24
-
+-- A little space between a chunk's code and its output
 function Div(el)
-  -- A little space between a chunk's code and its output
   if el.classes:includes("cell-output") and not el.classes:includes("cell-output-display") then
     el.content:insert(1, pandoc.RawBlock("latex", "\\vspace{0.4\\baselineskip}"))
     return el
   end
-  if not el.classes:includes("cell") then return nil end
-  local lines, whole = 0, true
-  el:walk({
-    CodeBlock = function(cb)
-      for _ in (cb.text .. "\n"):gmatch("(.-)\n") do lines = lines + 1 end
-    end,
-    Image = function() whole = false end,
-    Table = function() whole = false end,
-    Figure = function() whole = false end,
-    RawBlock = function(rb) if rb.text:match("figure") or rb.text:match("tabular") then whole = false end end,
-  })
-  if not whole or lines == 0 or lines > MAX_CELL_LINES then return nil end
-  el.content:insert(1, pandoc.RawBlock("latex", "\\begin{minipage}{\\linewidth}"))
-  el.content:insert(pandoc.RawBlock("latex", "\\end{minipage}"))
-  return el
 end
