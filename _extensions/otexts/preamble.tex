@@ -45,6 +45,12 @@
 \fi
 \fi
 
+% R output as left-to-right, left-aligned, like the code
+\RecustomVerbatimEnvironment{verbatim}{Verbatim}{}
+% ... and shaded like the code above it and the HTML output
+\BeforeBeginEnvironment{verbatim}{\begin{snugshade}}
+\AfterEndEnvironment{verbatim}{\end{snugshade}}
+
 % Tables in a smaller font (captions stay outside the tabular, at full size)
 \AtBeginEnvironment{tabular}{\small}
 \AtBeginEnvironment{longtable}{\small}
