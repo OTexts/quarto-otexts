@@ -4,7 +4,9 @@
 % before a code cell to display it at 70% text width.
 % Automatically resets at end of figure environment (LaTeX grouping).
 \newlength{\pandocfigwidth}
-\setlength{\pandocfigwidth}{\linewidth}
+% Set when the document starts: in the preamble \linewidth is still the class's
+% default, not the text width set by geometry in fpp.sty
+\AtBeginDocument{\setlength{\pandocfigwidth}{\linewidth}}
 \ifPDFTeX
 \renewcommand*\pandocbounded[1]{\resizebox{\pandocfigwidth}{!}{#1}}
 \else
