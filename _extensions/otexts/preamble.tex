@@ -45,6 +45,27 @@
 \fi
 \fi
 
+% Tables in a smaller font (captions stay outside the tabular, at full size)
+\AtBeginEnvironment{tabular}{\small}
+\AtBeginEnvironment{longtable}{\small}
+
+% A display that follows a blank line starts in vertical mode, where LaTeX adds
+% an empty line before it (on top of \parskip): start the paragraph with
+% \noindent so there is no empty line
+\let\otextsorigdisplay\[
+\renewcommand\[{\ifvmode\noindent\fi\otextsorigdisplay}
+\BeforeBeginEnvironment{equation}{\ifvmode\noindent\fi}
+\BeforeBeginEnvironment{equation*}{\ifvmode\noindent\fi}
+\BeforeBeginEnvironment{align}{\ifvmode\noindent\fi}
+\BeforeBeginEnvironment{align*}{\ifvmode\noindent\fi}
+\BeforeBeginEnvironment{gather*}{\ifvmode\noindent\fi}
+
+% Maths a little smaller, to sit with the text (Latin Modern Math is large next to Libron)
+\ifLuaTeX\setmathfont{Latin Modern Math}[Scale=0.95]\fi
+
+% For scaling wide tables to the text width
+\usepackage{adjustbox}
+
 \ifPDFTeX\DeclareUnicodeCharacter{2B24}{\textbullet}\fi
 
 % So pdflatex also works run by hand in the LaTeX/ folder after a render
