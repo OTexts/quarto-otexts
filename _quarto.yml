@@ -17,13 +17,10 @@ book:
     - preface.qmd
     - intro.qmd
     - references.qmd
-  page-footer:
-    left: "Published by OTexts using [Quarto](https://quarto.org). &copy; []{#current-year}"
-    border: false
-    background: light
   sidebar:
     id: book
     style: "docked"
+    footer: "Published by OTexts using [Quarto](https://quarto.org). &copy; []{#current-year}"
 
 bibliography: references.bib
 
