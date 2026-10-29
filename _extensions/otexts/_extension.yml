@@ -81,3 +81,4 @@ contributes:
       keep-tex: true
       filters:
         - otexts.lua
+        - code-blocks.lua
