@@ -7,8 +7,10 @@
 % Set when the document starts: in the preamble \linewidth is still the class's
 % default, not the text width set by geometry in fpp.sty
 \AtBeginDocument{\setlength{\pandocfigwidth}{\linewidth}}
+% Figures fill the width, unless that would leave no room on the page for the caption
+\newcommand*{\otextsfigbox}[1]{\adjustbox{width=\pandocfigwidth,max totalheight=0.88\textheight}{#1}}
 \ifPDFTeX
-\renewcommand*\pandocbounded[1]{\resizebox{\pandocfigwidth}{!}{#1}}
+\renewcommand*\pandocbounded[1]{\otextsfigbox{#1}}
 \else
 % Direction switches: TeX--XeT under XeLaTeX, \textdir under LuaLaTeX
 \ifXeTeX
@@ -20,7 +22,7 @@
 \fi
 % A box scaled in right-to-left mode is placed to the left of its origin,
 % so build it left to right (TeX--XeT, enabled by babel)
-\renewcommand*\pandocbounded[1]{\hbox{\otextsbeginL\resizebox{\pandocfigwidth}{!}{#1}\otextsendL}}
+\renewcommand*\pandocbounded[1]{\hbox{\otextsbeginL\otextsfigbox{#1}\otextsendL}}
 % The same for every image: in right-to-left mode it is placed to the left of
 % its origin (off the page, for the logo and figures)
 \AtBeginDocument{%
@@ -45,8 +47,8 @@
 \fi
 \fi
 
-% R output as left-to-right, left-aligned, like the code
-\RecustomVerbatimEnvironment{verbatim}{Verbatim}{}
+% R output as left-to-right, left-aligned, like the code, and in the same size
+\RecustomVerbatimEnvironment{verbatim}{Verbatim}{fontsize=\fontsize{8.9}{10}\selectfont}
 % ... and shaded like the code above it and the HTML output
 \BeforeBeginEnvironment{verbatim}{\begin{snugshade}}
 \AfterEndEnvironment{verbatim}{\end{snugshade}}

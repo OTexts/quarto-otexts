@@ -163,6 +163,8 @@ Render with `quarto render --to otexts-pdf`.
   A code block of up to 4 lines, or an output block of up to 16 lines, is kept in one piece.
   A longer code block may break across pages only between R commands (a comment stays with the command after it).
   This is done by `code-blocks.lua` and `\otextscodebreaks` in `fpp.sty`.
+- **Tables:** a table starts a new page unless the whole table fits (or its first 6 rows, for a table of more than 30 rows), so a caption isn't left alone at the bottom of a page.
+  This is done by `tables.lua`, using `needspace`.
 - **Cover:** the front-page cover is dropped, so the PDF starts at the next chapter.
 - **Customising:** a book can append its own LaTeX, such as maths macros in a `macros.tex`, with `include-in-header` and `include-after-body`, which are added to the format's.
   The preamble sets `\graphicspath{{../_book}}` so `pdflatex` also works when run by hand in the `LaTeX/` folder.
