@@ -158,7 +158,8 @@ Each book needs its own `software:` list, with `current: true` on itself and its
 Render with `quarto render --to otexts-pdf`.
 
 - **Fonts:** Kp text (`KpRoman`, from the `kpfonts-otf` TeX Live package), Fira Sans for headings and Hack for code, as in the HTML.
-  Hack is not in TeX Live: install it as a system font.
+  Hack is not in TeX Live, so it comes with the extension (`fonts/Hack-*.ttf`), and `otexts.lua` points LaTeX at it: nothing needs installing beyond TeX Live.
+  `fonts/` also has TrueType Libron and Fira Sans, for a book that builds its own PDF fonts from them (such as fppfa, which merges them with Farsi glyphs).
   A book can set its own `mainfont`, `sansfont` and `monofont` (with their `...options`).
 - **Maths:** KpMath, which suits a Latin-script book.
   A book in a non-Latin script (such as Farsi) should use Latin Modern Math: `mathfont: Latin Modern Math` and `mathfontoptions: "Scale=0.95"`.
