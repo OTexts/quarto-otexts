@@ -12,7 +12,9 @@ local function needspace(rows, caption_chars)
   if rows > MAX_WHOLE_ROWS then rows = MIN_ROWS end
   -- Plus the header, rules and space around the table
   local lines = rows + 3 + math.ceil(caption_chars / CHARS_PER_LINE)
-  return pandoc.RawBlock("latex", "\\needspace{" .. lines .. "\\baselineskip}")
+  -- \Needspace* measures the space left; \needspace's penalty can break the
+  -- page early even when the table fits
+  return pandoc.RawBlock("latex", "\\Needspace*{" .. lines .. "\\baselineskip}")
 end
 
 local function is_raw(block, pattern)
