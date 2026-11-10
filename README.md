@@ -154,7 +154,7 @@ Each book needs its own `software:` list, with `current: true` on itself and its
 
 ### PDF
 
-`otexts-pdf` loads the OTexts LaTeX style (`fpp.sty`, which Quarto copies to the project root when rendering, so a book can ignore it in git), a preamble (`preamble.tex`) and the index, and sets the shared PDF options: `book` class, LuaLaTeX, biblatex citations, numbered sections to depth 2, 2cm margins, wide figures and `keep-tex`.
+`otexts-pdf` loads the OTexts LaTeX style (`fpp.sty`) and the title-page logo (`OTexts-graylogo.pdf`), which Quarto copies to the project root when rendering, so a book can ignore them in git. It also loads a preamble (`preamble.tex`) and the index, and sets the shared PDF options: `book` class, LuaLaTeX, biblatex citations, numbered sections to depth 2, 2cm margins, wide figures and `keep-tex`.
 Render with `quarto render --to otexts-pdf`.
 
 - **Fonts:** Kp text (`KpRoman`, from the `kpfonts-otf` TeX Live package), Fira Sans for headings and Hack for code, as in the HTML.

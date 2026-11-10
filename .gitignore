@@ -8,3 +8,9 @@
 
 /.luarc.json
 /tasks/
+
+# Copied in or written by PDF renders
+/fpp.sty
+/OTexts-graylogo.pdf
+/*.tex
+/site_libs/
