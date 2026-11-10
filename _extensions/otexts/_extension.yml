@@ -58,8 +58,10 @@ contributes:
       colorlinks: false
       fig-pos: "htbp"
       tbl-pos: "htbp"
-      fig-height: 7
-      fig-width: 11.2
+      # Figures are drawn near their printed width (130mm text block), so the
+      # plot fonts keep their size
+      fig-width: 6.5
+      fig-height: 4
       # cairo_pdf finds the plot fonts set up by the otexts R package (BookMath)
       # through fontconfig; the default pdf() device can't use them. Plotmath
       # symbols are set in KaTeX_Main, as they are in the HTML (ragg) figures

@@ -32,6 +32,7 @@ Edit any book-specific rules in [`book.scss`](book.scss).
 ### Figures
 
 The format sets the figure defaults for R books: 7.5in wide with a golden-ratio aspect (`fig-asp: 0.618`), 150 dpi (doubled for retina screens), centred, `ragg_png`, shown at 100% width with lazy loading, and no `##` before printed output.
+PDF figures are 6.5 × 4in, close to their printed width in the 130mm text block, so the plot text stays near the size of the body text.
 A book or chunk can override any of these (e.g. `fig-width: 7` in `_quarto.yml`), but don't also set them with `knitr::opts_chunk$set()`, which overrides the YAML.
 Python books ignore the knitr options.
 
