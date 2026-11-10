@@ -25,8 +25,8 @@
 \usepackage{alltt}
 \let\temptt\texttt
 \renewcommand\texttt[1]{\mbox{\temptt{#1}}}
-% Under XeLaTeX/LuaLaTeX (e.g. right-to-left books) the fonts are set with
-% mainfont, sansfont and monofont in the document YAML instead
+% The format uses LuaLaTeX, with the fonts set by mainfont, sansfont, monofont
+% and mathfont in _extension.yml. These are for a book that switches to pdflatex
 \ifPDFTeX
 \usepackage[notextcomp,nott]{kpfonts}
 %\usepackage[t1,scale=0.86]{sourcecodepro}

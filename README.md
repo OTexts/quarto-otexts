@@ -154,11 +154,15 @@ Each book needs its own `software:` list, with `current: true` on itself and its
 
 ### PDF
 
-`otexts-pdf` loads the OTexts LaTeX style (`fpp.sty`, which Quarto copies to the project root when rendering, so a book can ignore it in git), a preamble (`preamble.tex`) and the index, and sets the shared PDF options: `book` class, pdfLaTeX, biblatex citations, numbered sections to depth 2, 2cm margins, wide figures and `keep-tex`.
+`otexts-pdf` loads the OTexts LaTeX style (`fpp.sty`, which Quarto copies to the project root when rendering, so a book can ignore it in git), a preamble (`preamble.tex`) and the index, and sets the shared PDF options: `book` class, LuaLaTeX, biblatex citations, numbered sections to depth 2, 2cm margins, wide figures and `keep-tex`.
 Render with `quarto render --to otexts-pdf`.
 
-- **Other engines:** set `pdf-engine: lualatex` (or `xelatex`) for right-to-left or non-Latin books.
-  The pdfTeX-only packages are then skipped, and book strings (chapter label, title page, copyright page, bibliography) are macros a book can redefine.
+- **Fonts:** Kp text (`KpRoman`, from the `kpfonts-otf` TeX Live package), Fira Sans for headings and Hack for code, as in the HTML.
+  Hack is not in TeX Live: install it as a system font.
+  A book can set its own `mainfont`, `sansfont` and `monofont` (with their `...options`).
+- **Maths:** KpMath, which suits a Latin-script book.
+  A book in a non-Latin script (such as Farsi) should use Latin Modern Math: `mathfont: Latin Modern Math` and `mathfontoptions: "Scale=0.95"`.
+- **Book strings:** the chapter label, title page, copyright page and bibliography headings are macros a book can redefine, for a book in another language.
 - **Figures:** R plots use `cairo_pdf`, so they pick up the same fonts as the HTML figures (set up by `otexts::setup_book()`).
 - **Code and output:** code and R output are in shaded blocks.
   A code block of up to 4 lines, or an output block of up to 16 lines, is kept in one piece.
@@ -168,7 +172,7 @@ Render with `quarto render --to otexts-pdf`.
   This is done by `tables.lua`, using `needspace`.
 - **Cover:** the front-page cover is dropped, so the PDF starts at the next chapter.
 - **Customising:** a book can append its own LaTeX, such as maths macros in a `macros.tex`, with `include-in-header` and `include-after-body`, which are added to the format's.
-  The preamble sets `\graphicspath{{../_book}}` so `pdflatex` also works when run by hand in the `LaTeX/` folder.
+  The preamble sets `\graphicspath{{../_book}}` so `lualatex` also works when run by hand in the `LaTeX/` folder.
 
 ### HTML post-processing
 

@@ -45,7 +45,17 @@ contributes:
       template-partials:
         - before-title.tex
       documentclass: book
-      pdf-engine: pdflatex
+      pdf-engine: lualatex
+      # Kp text and maths (the OpenType kpfonts, from kpfonts-otf), Fira Sans
+      # and Hack as in the HTML. Hack is a system font (Hack-*.ttf), not in TeX
+      # Live. Options are strings so a book's own options replace them
+      mainfont: KpRoman-Regular.otf
+      mainfontoptions: "BoldFont=KpRoman-Bold.otf, ItalicFont=KpRoman-Italic.otf, BoldItalicFont=KpRoman-BoldItalic.otf"
+      sansfont: FiraSans-Regular.otf
+      sansfontoptions: "BoldFont=FiraSans-Bold.otf, ItalicFont=FiraSans-Italic.otf, BoldItalicFont=FiraSans-BoldItalic.otf"
+      monofont: Hack
+      monofontoptions: "Scale=0.86"
+      mathfont: KpMath-Regular.otf
       block-headings: false
       cite-method: biblatex
       biblatexoptions:
